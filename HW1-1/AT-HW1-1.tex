@@ -1,0 +1,646 @@
+\documentclass[letterpaper, 11pt]{extarticle}
+
+\usepackage{../latexDependencies/misc/preamble}
+\graphicspath{ {../latexDependencies/images/HW1-3} }
+
+\newcommand{\subject}{Теория Автоматов и Алгоритмические Языки}
+\newcommand{\task}{Домашняя работа \textnumero 1-1}
+\newcommand{\name}{Очкин Никита}
+\newcommand{\group}{ФН11-52Б}
+\newcommand{\variant}{Вариант \textnumero 9}
+
+\linespread{1}
+
+\begin{document}
+
+\input{../latexDependencies/frontmatter/titlepage}
+
+\section*{Задача \rom{1}}
+
+\begin{spacing}{1.5}
+По номеру $ \text{\textnumero}^{\stackrel{A}{=}} (\alpha) =  1335 - 36 \cdot N \cdot (53 - n)$ 
+слова $\alpha \in A^{+}$ в натуральном словаре позитивного языка над алфавитом 
+\matr{A} = $\left<a,b,c,d,e,f\right>$ определить это слово и проверить результат вычисления.
+\end{spacing}
+
+\section*{Дано}
+
+\begin{equation*}
+    N = 9, \quad n = 52, \quad \text{\textnumero}^{\stackrel{A}{=}} (\alpha) = 1011
+\end{equation*}
+
+\section*{Решение}
+
+Опишем алгоритм нахождения слова в виде псевдокода
+\begin{tcolorbox}[colback=gray!10, colframe=gray!50, title=Псевдокод алгоритма нахождения слова по его номеру в лексикографическом словаре]
+    \begin{verbatim}
+    ввод: число, алфавит
+    условие: число > 0
+    вывод: результирующее слово
+    
+    ответ = пустая строка
+    длина = размер алфавита
+
+    пока число не равно нулю:
+        номерБуквы = число мод длина
+        если номерБуквы равен 0:
+            вычесть длину из числа
+
+        буква = алфавит по индексу (номерБуквы - 1) мод длина
+        добавить ответ к букве
+
+        разделить число на длину (целочисленное деление) и обновить число
+
+    вернуть перевернутый ответ
+
+    \end{verbatim}
+\end{tcolorbox}
+
+\noindent Вычисления произведем в python:
+
+\newpage
+
+\noindent алфавит: ['a', 'b', 'c', 'd', 'e', 'f'] \\ 
+длина алфавита: 6
+
+\begin{align*}
+    \begin{aligned}
+        & \text{Номер итерации: }& 1\\
+        & \text{Текущее значение: }& 1011\\
+        & 1011 \quad \% \quad 6 =&  3 \\
+        & \text{Текущий индекс буквы в словаре: }& 2\\
+        & \text{Текущая буква: }& \text{c}\\
+        & \text{Текущее слово: }& \text{c}\\
+    \end{aligned}
+    \qquad
+    \begin{aligned}
+        & \text{Номер итерации: }& 2\\
+        & \text{Текущее значение: }& 168\\
+        & 168 \quad \% \quad 6 =&  0 \\
+        & \text{Новое текущее значение: }& 162\\
+        & \text{Текущий индекс буквы в словаре: }& 5\\
+        & \text{Текущая буква: }& \text{f}\\
+        & \text{Текущее слово: }& \text{fc}\\
+    \end{aligned}
+\end{align*}
+
+\begin{align*}
+    \begin{aligned}
+        & \text{Номер итерации: }& 3\\
+        & \text{Текущее значение: }& 27\\
+        & 27 \quad \% \quad 6 =&  3 \\
+        & \text{Текущий индекс буквы в словаре: }& 2\\
+        & \text{Текущая буква: }& \text{c}\\
+        & \text{Текущее слово: }& \text{cfc}\\
+    \end{aligned}
+    \qquad
+    \begin{aligned}
+        & \text{Номер итерации: }& 4\\
+        & \text{Текущее значение: }& 4\\
+        & 4 \quad \% \quad 6 =&  4 \\
+        & \text{Текущий индекс буквы в словаре: }& 3\\
+        & \text{Текущая буква: }& \text{d}\\
+        & \text{Текущее слово: }& \text{dcfc}\\
+    \end{aligned}
+\end{align*}\\
+
+\noindent Итого мы получили слово \guillemotleft dcfc \guillemotright из номера 1011 за 4 итерации.\\
+
+\begin{spacing}{1.5}
+\noindent Для проверки результата воспользуемся библиотекой \high{itertools}, с помощью которой
+найдем все возможные слова вплоть до \guillemotleft ffffff \guillemotright 
+и упорядоченно их запишем:\\
+\end{spacing}
+
+\vspace{-10pt}
+
+\begin{gather*}
+    [ \text{a}, \text{b}, \text{c}, \text{d}, \text{e}, \text{f}, \text{aa}, 
+    \text{ab}, \text{ac}, \text{ad}, \text{ae}, \text{af}, \text{ba}, \text{bb}, 
+    \text{bc}, \text{bd}, \text{be}, \text{bf}, \text{ca}, \text{cb}, \text{cc}, 
+    \text{cd}, \text{ce}, \\
+    \text{cf}, \text{da}, \text{db}, \text{dc}, \text{dd}, \text{de}, \text{df}, 
+    \text{ea}, \text{eb}, \text{ec}, \text{ed}, \text{ee}, \text{ef}, \text{fa}, 
+    \text{fb}, \text{fc}, \text{fd}, \text{fe}, \text{ff}, \text{aaa}, \text{aab}, \\
+    \dots \\
+    \text{cccccd}, \text{ccccce}, \text{cccccf}, \text{ccccda}, \text{ccccdb}, 
+    \text{ccccdc}, \text{ccccdd}, \text{ccccde}, \text{ccccdf}, \\ 
+    \text{ccccea}, \text{cccceb}, \text{ccccec}, \text{cccced}, \text{ccccee},  
+    \text{ccccef}, \text{ccccfa}, \text{ccccfb}, \text{ccccfc},  \\ 
+    \dots \\
+    \text{ffffda}, \text{ffffdb}, \text{ffffdc} \text{ffffdd}, \text{ffffde}, 
+    \text{ffffdf}, \text{ffffea}, \text{ffffeb}, \text{ffffec}, \\
+    \text{ffffed}, \text{ffffee}, \text{ffffef}, \text{fffffa}, \text{fffffb}, 
+    \text{fffffc}, \text{fffffd}, \text{fffffe}, \text{ffffff} ]
+\end{gather*}\\
+
+\noindent Теперь же выведем 1011 - 1 й элемент и получим \guillemotleft dcfc\guillemotright.
+
+\newpage
+
+\section*{Задача \rom{2}}
+
+\begin{spacing}{1.5}
+По номерам $\quad \text{\textnumero}^{\stackrel{A}{=}} (\alpha) = 1332 - 34 \cdot N 
+\cdot (53 - n) \quad $ и $\quad \text{\textnumero}^{\stackrel{A}{=}} (\beta) = 
+996 + 14 \cdot 
+N \cdot (53 - n) \quad$ слов $\quad \alpha, \beta \in A^{+} \quad$ в в натуральном словаре позитивного 
+языка над алфавитом \underline{\underline{A}} = $\left<a,b,c,d,e,f\right>$ 
+определить номер слова $\text{\textnumero}^{\stackrel{A}{=}} (\alpha \otimes \beta)$ 
+и проверить справедливость формулы:\\ 
+$\text{\textnumero}^{\stackrel{A}{=}} 
+(\alpha \otimes \beta) = |A|^{|\beta|} \cdot \text{\textnumero}^{\stackrel{A}{=}} 
+(\alpha) + \text{\textnumero}^{\stackrel{A}{=}} (\beta)$
+\end{spacing}
+
+\section*{Дано}
+
+\begin{equation*}
+    N = 9, \quad n = 52, \quad 
+    \text{\textnumero}^{\stackrel{A}{=}} (\alpha) = 1026, \quad
+    \text{\textnumero}^{\stackrel{A}{=}} (\beta) = 1122
+\end{equation*}
+
+\section*{Решение}
+
+Найдем оба слова, воспользовавшись алгоритмом из первой задачи
+
+\newpage
+
+\begin{align*}
+    & \text{Алфавит}: [a, b, c, d, e, f] \\ 
+    & \text{Длина алфавита}: 6
+\end{align*}
+
+\setlength{\columnsep}{20pt} % Optional: Adjusts the space between columns
+\setlength{\columnseprule}{0.4pt} % Adds a vertical line between the columns
+
+\begin{multicols}{2}
+    % Альфа
+    \begin{align*}
+        \begin{aligned}
+            & \text{Номер итерации: }&1\\
+            & \text{Текущее значение: }&1026\\
+            & 1026 \quad \% \quad 6 =& 0 \\
+            & \text{Новое текущее значение: }&1020\\
+            & \text{Текущий индекс буквы в словаре: }&5\\
+            & \text{Текущая буква: }& \text{f}\\
+            & \text{Текущее слово: }& \text{f}\\
+        \end{aligned}
+    \end{align*}
+
+    \begin{align*}
+        \begin{aligned}
+            & \text{Номер итерации: }&2\\
+            & \text{Текущее значение: }&170\\
+            & 170 \quad \% \quad 6 =& 2 \\
+            & \text{Текущий индекс буквы в словаре: }&1\\
+            & \text{Текущая буква: }& \text{b}\\
+            & \text{Текущее слово: }& \text{bf}\\
+        \end{aligned}
+    \end{align*}
+    
+    \begin{align*}
+        \begin{aligned}
+            & \text{Номер итерации: }&3\\
+            & \text{Текущее значение: }&28\\
+            & 28 \quad \% \quad 6 =& 4 \\
+            & \text{Текущий индекс буквы в словаре: }&3\\
+            & \text{Текущая буква: }& \text{d}\\
+            & \text{Текущее слово: }& \text{dbf}\\
+        \end{aligned}
+    \end{align*}
+
+    \begin{align*}
+        \begin{aligned}
+            & \text{Номер итерации: }&4\\
+            & \text{Текущее значение: }&4\\
+            & 4 \quad \% \quad 6 =& 4 \\
+            & \text{Текущий индекс буквы в словаре: }&3\\
+            & \text{Текущая буква: }& \text{d}\\
+            & \text{Текущее слово: }& \text{ddbf}\\
+        \end{aligned}
+    \end{align*}\\
+    
+    \begin{center}
+        Результат \guillemotleft ddbf\guillemotright\\
+    \end{center}
+
+    % Бета
+    \columnbreak
+
+    \begin{align*}
+        \begin{aligned}
+            & \text{Номер итерации: }&1\\
+            & \text{Текущее значение: }&1122\\
+            & 1122 \quad \% \quad 6 =& 0 \\
+            & \text{Новое текущее значение: }&1116\\
+            & \text{Текущий индекс буквы в словаре: }&5\\
+            & \text{Текущая буква: }& \text{f}\\
+            & \text{Текущее слово: }& \text{f}\\
+        \end{aligned}
+    \end{align*}
+
+    \begin{align*}
+        \begin{aligned}
+            & \text{Номер итерации: }&2\\
+            & \text{Текущее значение: }&186\\
+            & 186 \quad \% \quad 6 =& 0 \\
+            & \text{Новое текущее значение: }&180\\
+            & \text{Текущий индекс буквы в словаре: }&5\\
+            & \text{Текущая буква: }& \text{f}\\
+            & \text{Текущее слово: }& \text{ff}\\
+        \end{aligned}
+    \end{align*}
+    
+    \begin{align*}
+        \begin{aligned}
+            & \text{Номер итерации: }&3\\
+            & \text{Текущее значение: }&30\\
+            & 30 \quad \% \quad 6 =& 0 \\
+            & \text{Новое текущее значение: }&24\\
+            & \text{Текущий индекс буквы в словаре: }&5\\
+            & \text{Текущая буква: }& \text{f}\\
+            & \text{Текущее слово: }& \text{fff}\\
+        \end{aligned}
+    \end{align*}
+
+    \begin{align*}
+        \begin{aligned}
+            & \text{Номер итерации: }&4\\
+            & \text{Текущее значение: }&4\\
+            & 4 \quad \% \quad 6 =& 4 \\
+            & \text{Текущий индекс буквы в словаре: }&3\\
+            & \text{Текущая буква: }& \text{d}\\
+            & \text{Текущее слово: }& \text{dfff}\\
+        \end{aligned}
+    \end{align*}\\
+
+    \begin{center}
+        Результат \guillemotleft dfff\guillemotright\\
+    \end{center}
+\end{multicols}
+
+\noindent $\alpha \otimes \beta =$ ddbfdfff \\
+
+\noindentСнова воспользовавшись \high{itertools} найдем:\\
+
+\noindent $\text{\textnumero}^{\stackrel{A}{=}} (\alpha \otimes \beta)$ = 
+1330818\\
+
+\noindent \textbf{Проверка:}\\
+
+\noindent $\text{\textnumero}^{\stackrel{A}{=}} (\alpha \otimes \beta) = 
+6^4 \cdot 1026 + 1122 = 1330818$\\\\\\
+
+\section*{Задача \rom{3}}
+
+\begin{spacing}{1.5}
+\noindent Минимизировать автомат по состояниям. Если исходный автомат не окажется 
+приведённым, то изобразить диаграмму минимизированного автомата 
+и произвести частичную проверку корректности минимизации, используя входную 
+строку не менее чем из 5 (пяти) знаков входного алфавита и соответствующие 
+начальные состояния исходного и минимизированного автоматов. 
+Кроме того, доказать приведённость минимизированного автомата.
+\end{spacing}
+
+\section*{Дано}
+
+\renewcommand{\arraystretch}{1.5} % Increase row height
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|
+        >{\centering\arraybackslash}p{1cm}|
+        >{\centering\arraybackslash}p{1cm}|
+        >{\centering\arraybackslash}p{1cm}|
+        >{\centering\arraybackslash}p{1cm}|
+        >{\centering\arraybackslash}p{1cm}|
+        >{\centering\arraybackslash}p{1cm}|}
+        \hline
+        & \multicolumn{2}{c|}{a} & \multicolumn{2}{c|}{b} & \multicolumn{2}{c|}{c} \\
+        \hline
+        1 & 8 & b & 2 & c & 4 & c \\
+        \hline
+        2 & 5 & a & 1 & b & 8 & a \\
+        \hline
+        3 & 4 & c & 8 & a & 3 & a \\
+        \hline
+        4 & 7 & c & 1 & a & 5 & a \\
+        \hline
+        5 & 3 & c & 1 & a & 4 & a \\
+        \hline
+        6 & 7 & a & 8 & b & 1 & a \\
+        \hline
+        7 & 5 & c & 8 & a & 7 & a \\
+        \hline
+        8 & 1 & b & 6 & c & 3 & c \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\newpage
+
+Изобразим графически схему состояний автомата.
+
+\begin{center}
+    \begin{tikzpicture}[shorten >=1pt,node distance=3cm,on grid,auto,scale=1.2,transform shape]
+        \node[state] (1) {1};
+        \node[state] (2) [right=of 1] {2};
+        \node[state] (3) [right=of 2] {3};
+        \node[state] (4) [below=of 1] {4};
+        \node[state] (5) [below=of 2] {5};
+        \node[state] (6) [below=of 3] {6};
+        \node[state] (7) [below=of 4] {7};
+        \node[state] (8) [below=of 5] {8};
+    
+        \path[->]
+        (1) edge [bend left=20]  node {a,b} (8)
+            edge [bend left=20]  node {b,c} (2)
+            edge [bend right=20] node [swap] {c,c} (4)
+        (2) edge [bend left=20]  node {a,a} (5)
+            edge [bend left=20]  node [swap] {b,b} (1)
+            edge [bend right=20] node [swap] {c,a} (8)
+        (3) edge [bend left=75]  node [swap] {a,c} (4)
+            edge [bend left=20]  node {b,a} (8)
+            edge [loop above]    node {c,a} ()
+        (4) edge [bend right=20] node [swap] {a,c} (7)
+            edge [bend left=20]  node [swap] {b,a} (1)
+            edge [bend right=20] node [swap] {c,a} (5)
+        (5) edge [bend left=20]  node {a,c} (3)
+            edge [bend left=20]  node [swap] {b,a} (1)
+            edge [bend right=20] node [swap] {c,a} (4)
+        (6) edge [bend left=70]  node {a,a} (7)
+            edge [bend left=40]  node [swap] {b,b} (8)
+            edge [bend right=30] node [swap] {c,a} (1)
+        (7) edge [bend left=20]  node [swap] {a,c} (5)
+            edge [bend left=20]  node [swap] {b,a} (8)
+            edge [loop below]    node {c,a} ()
+        (8) edge [bend left=20]  node {a,b} (1)
+            edge [bend left=35]  node [swap] {b,c} (6)
+            edge [bend right=70] node [swap] {c,c} (3);
+    \end{tikzpicture}
+\end{center}
+
+\section*{Решение}
+
+\begin{spacing}{1.5}
+\noindent \underline{\textbf{Первый шаг}}.
+Отношение эквивалентности $\sim^e$ индуцирует разбиение $\boldsymbol{\pi} = 
+\left<\pi_1, \pi_2, \pi_3\right>$
+совокупность состояний $V = 
+\left<1, 2, 3, 4, 5, 6, 7, 8\right>$ автомата Г на классы $\sim^e$ -эквивалентности
+$\pi_1 = \left<1, 8\right>$, $\pi_2 = \left<2, 6\right>$, $\pi_3 = \left<3, 4, 5, 7\right>$, 
+в каждом из которых буква выхода автомата определяется
+входной буквой, не зависящей от состояния автомата из рассматриваемого класса
+эквивалентности. Проиллюстрируем полученное разбиение $\boldsymbol{\pi} = 
+\left<\pi_1, \pi_2, \pi_3\right>$.
+\end{spacing}
+
+\begin{gather*}
+    \boldsymbol{\pi} = \left<\pi_1, \pi_2, \pi_3\right> \\
+    \pi_1 = \left<1, 8\right> \quad 
+    \pi_2 = \left<2, 6\right> \quad 
+    \pi_3 = \left<3, 4, 5, 7\right>
+\end{gather*}
+
+\renewcommand{\arraystretch}{1.5} % Increase row height
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|
+                    >{\centering\arraybackslash}p{1cm}|
+                    >{\centering\arraybackslash}p{1cm}|
+                    >{\centering\arraybackslash}p{1cm}|
+                    >{\centering\arraybackslash}p{1cm}|
+                    >{\centering\arraybackslash}p{1cm}|
+                    >{\centering\arraybackslash}p{1cm}|
+                     c}
+        \cline{1-7}
+        & \multicolumn{2}{c|}{a} & \multicolumn{2}{c|}{b} & \multicolumn{2}{c|}{c} & \\
+        \cline{1-7}
+        1 & 8 & b & 2 & c & 4 & c & \rdelim\}{2}{*}[$\pi_1$] \\
+        \cline{1-7}
+        8 & 1 & b & 6 & c & 3 & c & \\  
+        \cline{1-7}
+        2 & 5 & a & 1 & b & 8 & a & \rdelim\}{2}{*}[$\pi_2$] \\
+        \cline{1-7}
+        6 & 7 & a & 8 & b & 1 & a & \\  
+        \cline{1-7}
+        3 & 4 & c & 8 & a & 3 & a & \rdelim\}{4}{*}[$\pi_3$] \\
+        \cline{1-7}
+        4 & 7 & c & 1 & a & 5 & a & \\  
+        \cline{1-7}
+        5 & 3 & c & 1 & a & 4 & a & \\  
+        \cline{1-7}
+        7 & 5 & c & 8 & a & 7 & a & \\  
+        \cline{1-7}
+    \end{tabular}
+\end{table}
+
+\vspace{20pt}
+
+\begin{spacing}{1.5}
+\noindent \underline{\textbf{Второй шаг}}.
+Отношение эквивалентности $\sim$ индуцирует разбиения $\boldsymbol{\pi}^{(1)} = (\Pi_1)$,
+$\boldsymbol{\pi}^{(2)} = (\Pi_2)$ и $\boldsymbol{\pi}^{(3)} = (\Pi_3)$ на каждом из 
+классов $\pi_1 = \left<1, 8\right>$, $\pi_2 = \left<2, 6\right>$, $\pi_3 = 
+\left<3, 4, 5, 7\right>$, соответственно, где в каждом из классов $\Pi_1 = 
+\left<1, 8\right>$, $\Pi_2 = \left<2, 6\right>$, $\Pi_3 = \left<3, 4, 5, 7\right>$ 
+буква входа автомата переводит состояние автомата из этого класса в состояние одного 
+из этих классов $\pi_1$, $\pi_2$ или $\pi_3$, зависящего только от этой входной буквы. 
+Проиллюстрируем эти переходы.
+\end{spacing}
+
+\begin{equation*}
+    \Pi_1 = \left<1, 8\right> \quad
+    \Pi_2 = \left<2, 6\right> \quad
+    \Pi_3 = \left<3, 4, 5, 7\right>
+\end{equation*}
+
+\renewcommand{\arraystretch}{1.5} % Increase row height
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|
+                    c|
+                    >{\centering\arraybackslash}p{2cm}|
+                    >{\centering\arraybackslash}p{2cm}|
+                    >{\centering\arraybackslash}p{2cm}|
+                    c}
+        \cline{2-5}
+        & & a & b & c & \\
+        \cline{2-5}
+        \ldelim\{{2}{*}[$\pi_1$] & 1 & $\pi_1$ & $\pi_2$ & $\pi_3$ & \rdelim\}{2}{*}[$\Pi_1$] \\
+        \cline{2-5}
+        & 8 & $\pi_1$ & $\pi_2$ & $\pi_3$ & \\
+        \cline{2-5}
+        \ldelim\{{2}{*}[$\pi_2$] & 2 & $\pi_3$ & $\pi_1$ & $\pi_1$ & \rdelim\}{2}{*}[$\Pi_2$] \\
+        \cline{2-5}
+        & 6 & $\pi_3$ & $\pi_1$ & $\pi_1$ & \\
+        \cline{2-5}
+        \ldelim\{{4}{*}[$\pi_3$] & 3 & $\pi_3$ & $\pi_1$ & $\pi_3$ & \rdelim\}{4}{*}[$\Pi_3$] \\
+        \cline{2-5}
+        & 4 & $\pi_3$ & $\pi_1$ & $\pi_3$ & \\
+        \cline{2-5}
+        & 5 & $\pi_3$ & $\pi_1$ & $\pi_3$ & \\
+        \cline{2-5}
+        & 7 & $\pi_3$ & $\pi_1$ & $\pi_3$ & \\
+        \cline{2-5}
+    \end{tabular}
+\end{table}
+
+\vspace{20pt}
+
+\begin{spacing}{1.5}
+    \noindent \underline{\textbf{Третий шаг}}.
+     Так как $\boldsymbol{\pi} = \boldsymbol{\Pi}$ , то присваиваем
+    разбиению $\boldsymbol{\pi}$ значение разбиения $\boldsymbol{\Pi}$ 
+    ($\boldsymbol{\pi} := \boldsymbol{\Pi}$) и переходим к четвертому шагу алгоритма.
+\end{spacing}
+
+\begin{spacing}{1.5}
+    \noindent \underline{\textbf{Четвертый шаг}}.
+    Создаем автомат $\Omega = $Г/$\sim^a = (A, B, \boldsymbol{\pi},
+    \overset{\sim}{\delta}, \overset{\sim}{\lambda}) = (A, B, \boldsymbol{\pi}, \ast, \bullet)$,
+    где для состояния $v \in \pi_j (j = \overline{1, 4})$ из компоненты $\pi_j \in \boldsymbol{\pi}$:
+    \begin{equation*}
+        \begin{cases}
+            \overset{\sim}{\delta}(a, \overset{\sim}{v}^a) = a \ast \overset{\sim}{v}^a =
+            \delta(a, v); \\
+            \overset{\sim}{\lambda}(a, \overset{\sim}{v}^a) = a \bullet \overset{\sim}{v}^a =
+            \lambda(a, v).
+        \end{cases}
+    \end{equation*}
+\end{spacing}
+
+\begin{spacing}{1.5}
+    \noindent \underline{\textbf{Пятый шаг}}.
+    Выходим из алгоритма с результатом в виде приведенного автомата
+    $\Omega = $Г/$\sim^a$, работу которого проиллюстрируем
+\end{spacing}
+
+\renewcommand{\arraystretch}{1.5} % Increase row height
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|
+        >{\centering\arraybackslash}p{1cm}|
+        >{\centering\arraybackslash}p{1cm}|
+        >{\centering\arraybackslash}p{1cm}|
+        >{\centering\arraybackslash}p{1cm}|
+        >{\centering\arraybackslash}p{1cm}|
+        >{\centering\arraybackslash}p{1cm}|}
+        \hline
+        & \multicolumn{2}{c|}{a} & \multicolumn{2}{c|}{b} & \multicolumn{2}{c|}{c} \\
+        \hline
+        $\pi_1$ & $\pi_1$ & b & $\pi_2$ & c & $\pi_3$ & c \\
+        \hline
+        $\pi_2$ & $\pi_3$ & a & $\pi_1$ & b & $\pi_1$ & a \\
+        \hline
+        $\pi_3$ & $\pi_3$ & c & $\pi_1$ & a & $\pi_3$ & a \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{10pt}
+
+\noindent Изобразим графически схему состояний приведенного автомата.
+
+\vspace{50pt}
+
+\begin{center}
+    \begin{tikzpicture}[shorten >=1pt,node distance=3cm,on grid,auto]
+        \begin{scope}[scale=1.75, transform shape]
+            \node[state] (pi_1)   {$\pi_1$};
+            \node[state] (pi_2) [right=of pi_1] {$\pi_2$};
+            \node[state] (pi_3) [below left=of pi_2] {$\pi_3$};
+        
+            \path[->]
+            (pi_1) edge [loop above]   node {a,b} ()
+                   edge [bend left=70] node {b,c} (pi_2)
+                   edge [bend right=0] node [swap] {c,c} (pi_3)
+            (pi_2) edge [bend left=20] node {a,a} (pi_3)
+                   edge [bend left]    node [swap] {b,b} (pi_1)
+                   edge [bend right]   node [swap] {c,a} (pi_1)
+            (pi_3) edge [loop below]   node {a,c} ()
+                   edge [bend left=60] node {b,a} (pi_1)
+                   edge [loop right]   node {c,a} ();
+        \end{scope}
+    \end{tikzpicture}
+\end{center}
+
+\begin{center}
+    \begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto]
+        \begin{scope}[scale=1.5, transform shape]
+            \node[state] (pi_1_1)                   {$\pi_1$};
+            \node[state] (pi_2)   [right=of pi_1_1] {$\pi_1$};
+            \node[state] (pi_3)   [right=of pi_2]   {$\pi_2$};
+            \node[state] (pi_1_2) [right=of pi_3]   {$\pi_1$};
+
+            \path[->]
+            % above arrows
+            (pi_1_1) edge node {a} (pi_2)
+            (pi_2)   edge node {b} (pi_3)
+            (pi_3)   edge node {c} (pi_1_2);
+
+            \path[->]
+            % below arrows
+            (pi_1_1) edge node [swap] {b} (pi_2)
+            (pi_2)   edge node [swap] {c} (pi_3)
+            (pi_3)   edge node [swap] {a} (pi_1_2);
+        \end{scope}
+    \end{tikzpicture}
+\end{center}
+
+\vspace{25pt}
+
+\begin{center}
+    \begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto]
+        \begin{scope}[scale=1.5, transform shape]
+            \node[state] (pi_1_1)                   {$1$};
+            \node[state] (pi_2)   [right=of pi_1_1] {$8$};
+            \node[state] (pi_3)   [right=of pi_2]   {$6$};
+            \node[state] (pi_1_2) [right=of pi_3]   {$1$};
+
+            \path[->]
+            % above arrows
+            (pi_1_1) edge node {a} (pi_2)
+            (pi_2)   edge node {b} (pi_3)
+            (pi_3)   edge node {c} (pi_1_2);
+
+            \path[->]
+            % below arrows
+            (pi_1_1) edge node [swap] {b} (pi_2)
+            (pi_2)   edge node [swap] {c} (pi_3)
+            (pi_3)   edge node [swap] {a} (pi_1_2);
+        \end{scope}
+    \end{tikzpicture}
+\end{center}
+
+\vspace{10pt}
+
+\begin{center}
+    abc $\cdot \pi_1$ = bca $\Longrightarrow$ abc $\cdot$ 1 = bca 
+\end{center}
+
+\vspace{10pt}
+
+\noindent Доказательство приведенности автомата: $\Omega = 
+(A, B, \boldsymbol{\pi}, \ast, \bullet)$
+
+\vspace{10pt}
+
+\begin{equation*}
+    \begin{cases}
+        a \cdot \pi_1 = b \\
+        a \cdot \pi_2 = a \\
+        a \cdot \pi_3 = c
+    \end{cases} 
+    \quad
+    \Longrightarrow
+    \quad
+    \begin{cases}
+        \pi_1 \cancel{\sim}^a \pi_2 \\
+        \pi_1 \cancel{\sim}^a \pi_3 \\
+        \pi_2 \cancel{\sim}^a \pi_3 
+    \end{cases}
+\end{equation*}
+
+\end{document}
