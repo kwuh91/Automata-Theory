@@ -1,0 +1,1197 @@
+\documentclass[a4paper, 14pt]{extarticle}
+
+\usepackage{../latexDependencies/misc/preamble2}
+
+\geometry{a4paper}
+
+% Название дисциплины
+\newcommand{\subject}{Теория автоматов и алгоритмические языки} 
+
+% Тип работы
+% lab - для лабораторной работы 
+% hw  - для домашней     работы
+\newcommand{\task}{hw} 
+
+% Номер работы
+\newcommand{\taskNumber}{1-2} 
+
+% Название работы
+\newcommand{\taskName}{Итерационный метод Якоби для полного решения задачи} 
+
+% Имя студента
+\newcommand{\studentName}{Очкин Н.В.}
+
+% Имя преподававателя
+\newcommand{\teacherName}{Кутыркин В.А.}
+
+% Группа
+\newcommand{\group}{ФН11-52Б}
+
+% Вариант
+\newcommand{\variant}{9}
+
+\begin{document}
+
+\graphicspath{ {../latexDependencies/images} } 
+\input{../latexDependencies/frontmatter/titlepage2}
+
+\newgeometry{left=25mm, right=25mm, top=20mm, bottom=20mm}
+
+% \graphicspath{ {../latexDependencies/images/LW1} }
+
+% Customize section, subsection and subsubsection styles
+\titleformat{\section}
+  {\normalfont\Large\bfseries}{\thesection}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\titleformat{\paragraph}
+  {\small\normalsize\bfseries}{\theparagraph}{1em}{}
+
+\thispagestyle{empty}
+
+% \null\newpage
+
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+
+\pagenumbering{roman}
+
+\tableofcontents
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\setstretch{1}
+\linespread{1.1}
+
+% \setlength{\parskip}{29pt}
+
+\setlength{\parindent}{0pt}
+
+\fontsize{12pt}{16pt}\selectfont
+
+\newcommand{\OV}[1]{%
+  \overset{\rule{5pt}{0.4pt}}{\text{#1}\vphantom{\text{\normalsize I}}}%
+  \hspace{2pt}
+}
+
+\newcommand{\NOV}[1]{
+  \text{#1}%
+  \hspace{2pt}
+}
+
+% --------------------------------------START--------------------------------------
+
+\section{Задача \rom{1}}
+
+Найти СДНФ, СКНФ и полином Жегалкина булевой функции f от четырёх переменных,
+заданной таблицей:
+
+\begin{table}[h!]
+  \centering
+  \setlength{\arrayrulewidth}{0.5mm}
+  \setlength{\tabcolsep}{38pt}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \rowcolor{gray!50}
+    \# & \bfseries A & \bfseries B & \bfseries C & \bfseries D & \bfseries \itshape f \\
+    \hline
+    0 & 0 & 0 & 0 & 0 & 1 \\
+    \hline
+    1 & 0 & 0 & 0 & 1 & 0 \\
+    \hline
+    2 & 0 & 0 & 1 & 0 & 0 \\
+    \hline
+    3 & 0 & 0 & 1 & 1 & 0 \\
+    \hline
+    4 & 0 & 1 & 0 & 0 & 0 \\
+    \hline
+    5 & 0 & 1 & 0 & 1 & 0 \\
+    \hline
+    6 & 0 & 1 & 1 & 0 & 1 \\
+    \hline
+    7 & 0 & 1 & 1 & 1 & 1 \\
+    \hline
+    8 & 1 & 0 & 0 & 0 & 0 \\
+    \hline
+    9 & 1 & 0 & 0 & 1 & 1 \\
+    \hline
+    10 & 1 & 0 & 1 & 0 & 0 \\
+    \hline
+    11 & 1 & 0 & 1 & 1 & 1 \\
+    \hline
+    12 & 1 & 1 & 0 & 0 & 1 \\
+    \hline
+    13 & 1 & 1 & 0 & 1 & 1 \\
+    \hline
+    14 & 1 & 1 & 1 & 0 & 0 \\
+    \hline
+    15 & 1 & 1 & 1 & 1 & 1 \\
+    \hline
+    \end{tabular}
+  \end{adjustbox}
+\end{table}
+
+Если возможно, сократить запись совершенных нормальных
+форм и сделать проверку, используя таблицу истинности, в том числе и для полинома
+Жегалкина.
+
+\newpage
+
+\subsection{СДНФ}
+
+\subsubsection{Часть 1. Метод Квайна — Мак-Класки}
+
+\paragraph{Шаг 1: находим основные импликанты}
+
+\vspace{10pt}
+
+Можно легко записать СДНФ, просто просуммировав минтермы, где функция принимает значение 1. 
+
+\begin{equation*}
+  f = \overset{0}{\OV{A}\OV{B}\OV{C}\OV{D}} + \overset{6}{\OV{A}\NOV{B}\NOV{C}\OV{D}} + 
+  \overset{7}{\OV{A}\NOV{B}\NOV{C}\NOV{D}} + \overset{9}{\NOV{A}\OV{B}\OV{C}\NOV{D}} + 
+  \overset{11}{\NOV{A}\OV{B}\NOV{C}\NOV{D}} + \overset{12}{\NOV{A}\NOV{B}\OV{C}\OV{D}} + 
+  \overset{13}{\NOV{A}\NOV{B}\OV{C}\NOV{D}} + \overset{15}{\vphantom{\OV{A}}\NOV{A}\NOV{B}\NOV{C}\NOV{D}}
+\end{equation*}
+
+\begin{equation*}
+  f = \left(0,\hspace{5pt} 6,\hspace{5pt} 7,\hspace{5pt} 9,\hspace{5pt} 11,
+  \hspace{5pt} 12,\hspace{5pt} 13,\hspace{5pt} 15\right)
+\end{equation*}
+
+\vspace{10pt}
+
+Для оптимизации запишем минтермы, включая те, которые соответствуют равнодушным состояниям, 
+в следующую таблицу: 
+
+\vspace{10pt}
+
+\begin{table}[h!]
+  \centering
+  \setlength{\arrayrulewidth}{0.3mm}
+  \setlength{\tabcolsep}{38pt}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{ p{4cm} p{2cm} p{5cm} }
+
+    \multirow{2}{*}{Количество ``1''} & \multirow{2}{*}{Минтерм} & Двоичное      \\
+                                      &                          & представление \\
+    &&\\
+    \hdashline
+    0 & m0 & 0000* \\ 
+    \hdashline
+    \multirow{3}{*}{2} & m6 & 0110 \\
+                       & m9 & 1001 \\
+                       & m12 & 1100 \\
+    \hdashline
+    \multirow{3}{*}{3} & m7 & 0111 \\
+                       & m11 & 1011 \\
+                       & m13 & 1101 \\
+    \hdashline
+    4 & m15 & 1111 \\
+    \hdashline
+
+    \end{tabular}
+  \end{adjustbox}
+\end{table}
+
+\vspace{10pt}
+
+Теперь можно начинать комбинировать между собой минтермы, 
+то есть проводить операцию склеивания. Если два минтерма 
+отличаются лишь символом, который стоит в одной и той же 
+позиции в обоих, заменяем этот символ на «-», это означает, 
+что данный символ для нас не имеет значения. Термы, не поддающиеся 
+дальнейшему комбинированию, обозначаются «*». При переходе к импликантам 
+второго ранга, трактуем «-» как третье значение. Например: -110 и -100 
+или -11- могут быть скомбинированы, но не -110 и 011-.
+
+\newpage
+
+\begin{center}
+  Импликанты 1-го уровня
+\end{center}
+
+\begin{table}[h!]
+  \centering
+  \setlength{\arrayrulewidth}{0.3mm}
+  \setlength{\tabcolsep}{38pt}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{ p{4cm} p{2cm} p{5cm} }
+
+    \multirow{2}{*}{Количество ``1''} & \multirow{2}{*}{Минтерм} & Двоичное      \\
+                                      &                          & представление \\
+    &&\\
+    \hdashline
+    \multirow{4}{*}{2} & m(6, 7) & 011-* \\
+                       & m(9, 11) & 10-1 \\
+                       & m(9, 13) & 1-01 \\
+                       & m(12, 13) & 110-* \\
+    \hdashline
+    \multirow{3}{*}{3} & m(7, 15) & -111 \\
+                       & m(11, 15) & 1-11 \\
+                       & m(13, 15) & 11-1 \\
+    \hdashline
+
+    \end{tabular}
+  \end{adjustbox}
+\end{table}
+
+\vspace{10pt}
+
+\begin{center}
+  Импликанты 2-го уровня
+\end{center}
+
+\begin{table}[h!]
+  \centering
+  \setlength{\arrayrulewidth}{0.3mm}
+  \setlength{\tabcolsep}{38pt}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{ p{4cm} p{4cm} p{5cm} }
+
+    \multirow{2}{*}{Количество ``1''} & \multirow{2}{*}{Минтерм} & Двоичное      \\
+                                      &                          & представление \\
+    &&\\
+    \hdashline
+    \multirow{2}{*}{2} & m(9, 11, 13, 15) & 1--1* \\
+                       & m(9, 13, 11, 15) & 1--1 \\
+    \hdashline
+
+    \end{tabular}
+  \end{adjustbox}
+\end{table}
+
+\vspace{10pt}
+
+Таким образом, мы получили следующую \textbf{сокращенную дизъюнктивную нормальную форму}
+заданной функции:
+
+\begin{equation*}
+  f = \OV{A}\OV{B}\OV{C}\OV{D} + \OV{A}\NOV{B}\NOV{C} + \NOV{A}\NOV{B}\OV{C} +
+  \NOV{A}\NOV{D}
+\end{equation*}
+
+\newpage
+
+\paragraph{Шаг 2: таблица простых импликант}
+
+\begin{table}[h!]
+  \centering
+  \setlength{\arrayrulewidth}{0.1mm}
+  \setlength{\tabcolsep}{10pt}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{|p{4cm}|c|c|c|c|c|c|c|c|c|}
+    \noalign{\global\arrayrulewidth=0.6mm}
+    \hline
+                      & 0 & 6 & 7 & 9 & 11 & 12 & 13 & 15 & \\
+    \hline
+    \noalign{\global\arrayrulewidth=0.1mm}
+     m0               & 1 &   &   &   &    &    &    &    & $\OV{A}\OV{B}\OV{C}\OV{D}$ \\
+    \hline
+     m(6, 7)          &   & 1 & 1 &   &    &    &    &    & $\OV{A}\NOV{B}\NOV{C}$ \\
+    \hline
+     m(12, 13)        &   &   &   &   &    & 1  &  1 &    & $\NOV{A}\NOV{B}\OV{C}$ \\
+    \hline
+     m(9, 11, 13, 15) &   &   &   & 1 & 1  &    &  1 &  1 & $\NOV{A}\NOV{D}$ \\
+    \noalign{\global\arrayrulewidth=0.6mm}
+    \hline
+                      & \faStarO  &  \faStarO &  \faStarO & \faStarO  &  \faStarO  &   \faStarO &  \faStarO  &   \faStarO & \\
+    \hline
+    \noalign{\global\arrayrulewidth=0.1mm}
+    \end{tabular}
+  \end{adjustbox}
+\end{table}
+
+\subsubsection{Часть 2. Метод Петрика}
+
+Поскольку сокращенная форма функции очень часто не является минимальной, воспользуемся
+методом Петрика для нахождения всех возможных минимальных форм на основе сокращенных.\\
+
+\vspace{10pt}
+
+Рассмотрим таблицу простых импликант, полученную в методе Квайна — Мак-Класки.
+В колонках находится различное число единиц. Например, в колонке 0 записана одна единица,
+это значит, что минтерм m0 останется в функции, если ипликанта $\OV{A}\OV{B}\OV{C}\OV{D}$ 
+не будет удалена. Следовательно, импликанту $\OV{A}\OV{B}\OV{C}\OV{D}$ удалять нельзя. 
+Точно так же нельзя удалять и импликанту $\NOV{A}\NOV{D}$, и т.д. На этом основании импликантную
+матрицу можно упростить.\\
+
+Поскольку простые испликанты $\OV{A}\OV{B}\OV{C}\OV{D}$, $\NOV{A}\NOV{D}$, и т.д. являются
+обязательными для всех вариантов тупиковых форм, то их из матрицы можно удалить. Вместе
+с ними можно удалить и образующие их минтермы, так как в функции они уже содержатся за счет
+импликант $\OV{A}\OV{B}\OV{C}\OV{D}$, $\NOV{A}\NOV{D}$, и т.д. В таблице эти
+минтермы отмечены звездочками (под колонками).\\
+
+После всех удалений матрица простых импликант уничтожается, что означает, что найденная
+скоращенная форма является минимальной.\\ 
+
+\newpage
+
+\subsubsection{Проверка}
+
+\begin{table}[h!]
+  \centering
+  \setlength{\arrayrulewidth}{0.5mm}
+  \setlength{\tabcolsep}{20pt}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \rowcolor{gray!50}
+    \# & \bfseries A & \bfseries B & \bfseries C & \bfseries D & 
+    $\OV{A}\OV{B}\OV{C}\OV{D}$ & $\OV{A}\NOV{B}\NOV{C}$ & $\NOV{A}\NOV{B}\OV{C}$ & 
+    $\NOV{A}\NOV{D}$ & \bfseries \itshape f \\
+    \hline
+    0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\
+    \hline
+    1 & 0 & 0 & 0 & 1 & 0& 0&0&0 & 0 \\
+    \hline
+    2 & 0 & 0 & 1 & 0 & 0&0&0&0 & 0 \\
+    \hline
+    3 & 0 & 0 & 1 & 1 & 0&0&0&0 & 0 \\
+    \hline
+    4 & 0 & 1 & 0 & 0 & 0&0&0&0 & 0 \\
+    \hline
+    5 & 0 & 1 & 0 & 1 & 0&0&0&0 & 0 \\
+    \hline
+    6 & 0 & 1 & 1 & 0 & 0&1&0&0 & 1 \\
+    \hline
+    7 & 0 & 1 & 1 & 1 & 0&2&0&0 & 1 \\
+    \hline
+    8 & 1 & 0 & 0 & 0 & 0&0&0&0 & 0 \\
+    \hline
+    9 & 1 & 0 & 0 & 1 & 0&0&0&1 & 1 \\
+    \hline
+    10 & 1 & 0 & 1 & 0 & 0&0&0&0 & 0 \\
+    \hline
+    11 & 1 & 0 & 1 & 1 & 0&0&0&1 & 1 \\
+    \hline
+    12 & 1 & 1 & 0 & 0 & 0&0&1&0 & 1 \\
+    \hline
+    13 & 1 & 1 & 0 & 1 & 0&0&1&1 & 1 \\
+    \hline
+    14 & 1 & 1 & 1 & 0 & 0&0&0&0 & 0 \\
+    \hline
+    15 & 1 & 1 & 1 & 1 & 0&0&0&1 & 1 \\
+    \hline
+    \end{tabular}
+  \end{adjustbox}
+\end{table}
+
+Провекра сошлась.
+
+\subsubsection{Ответ}
+
+Единственная минимальная дизъюнктивная нормальная форма исходной функции:
+\begin{equation*}
+  f = \OV{A}\OV{B}\OV{C}\OV{D} + \OV{A}\NOV{B}\NOV{C} + \NOV{A}\NOV{B}\OV{C} +
+  \NOV{A}\NOV{D}
+\end{equation*}
+
+\newpage
+
+\subsection{СКНФ}
+
+При нахождении тупиковых и минимальных КНФ булевых функций необходимо действовать в той 
+же последовательности, что и в предыдщем подразделе, но с учетом того, что для инверсии 
+заданной функции требуется найти все тупиковые формы. В общем случае последовательность
+действий, представленная в данном подразделе состоит в следующем:
+
+\begin{enumerate}[a)]
+  \item найти СДНФ заданной функции f;
+  \item записать СДНФ функции $\OV{\itshape f}$;
+  \item представить функцию $\OV{\itshape f}$ в виде сокращенной ДНФ;
+  \item методом Петрика найти все тупиковые формы для ДНФ функции $\OV{\itshape f}$;
+  \item все тупиковые форму проинвертировать по теореме де Моргана. Получим
+  список тупиковых КНФ заданной функции $\OV{\itshape f}$;
+  \item выбрать из тупиковых форм все минимальные по числу вхождений аргументов.
+\end{enumerate}
+
+\subsubsection{Нахождение тупиковых и минимальных КНФ}
+
+\paragraph{Найти СДНФ заданной функции \textit{f}}
+
+\begin{equation*}
+  f = \overset{0}{\OV{A}\OV{B}\OV{C}\OV{D}} + \overset{6}{\OV{A}\NOV{B}\NOV{C}\OV{D}} + 
+  \overset{7}{\OV{A}\NOV{B}\NOV{C}\NOV{D}} + \overset{9}{\NOV{A}\OV{B}\OV{C}\NOV{D}} + 
+  \overset{11}{\NOV{A}\OV{B}\NOV{C}\NOV{D}} + \overset{12}{\NOV{A}\NOV{B}\OV{C}\OV{D}} + 
+  \overset{13}{\NOV{A}\NOV{B}\OV{C}\NOV{D}} + \overset{15}{\vphantom{\OV{A}}\NOV{A}\NOV{B}\NOV{C}\NOV{D}}
+\end{equation*}
+
+\begin{equation*}
+  f = \left(0,\hspace{5pt} 6,\hspace{5pt} 7,\hspace{5pt} 9,\hspace{5pt} 11,
+  \hspace{5pt} 12,\hspace{5pt} 13,\hspace{5pt} 15\right)
+\end{equation*}
+
+\vspace{10pt}
+
+\paragraph{Записать СДНФ функции $\OV{\itshape f}$}
+
+\begin{equation*}
+  \OV{\itshape f} = \overset{1}{\OV{A}\OV{B}\OV{C}\NOV{D}} + \overset{2}{\OV{A}\OV{B}\NOV{C}\OV{D}} + 
+  \overset{3}{\OV{A}\OV{B}\NOV{C}\NOV{D}} + \overset{4}{\OV{A}\NOV{B}\OV{C}\OV{D}} + 
+  \overset{5}{\OV{A}\NOV{B}\OV{C}\NOV{D}} + \overset{8}{\NOV{A}\OV{B}\OV{C}\OV{D}} + 
+  \overset{10}{\NOV{A}\OV{B}\NOV{C}\OV{D}} + \overset{14}{\NOV{A}\NOV{B}\NOV{C}\OV{D}}
+\end{equation*}
+
+\begin{equation*}
+  \OV{\itshape f} = \left(1,\hspace{5pt} 2,\hspace{5pt} 3,\hspace{5pt} 4,\hspace{5pt} 5,
+  \hspace{5pt} 8,\hspace{5pt} 10,\hspace{5pt} 14\right)
+\end{equation*}
+
+\vspace{10pt}
+
+\newpage
+
+\paragraph{Представить функцию $\OV{\itshape f}$ в виде сокращенной ДНФ}
+
+\begin{table}[h!]
+  \centering
+  \setlength{\arrayrulewidth}{0.3mm}
+  \setlength{\tabcolsep}{38pt}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{ p{4cm} p{2cm} p{5cm} }
+
+    \multirow{2}{*}{Количество ``1''} & \multirow{2}{*}{Минтерм} & Двоичное      \\
+                                      &                          & представление \\
+    &&\\
+    \hdashline
+    \multirow{4}{*}{1} & m1 & 0001 \\
+                       & m2 & 0010 \\
+                       & m4 & 0100 \\
+                       & m8 & 1000 \\
+    \hdashline
+    \multirow{3}{*}{2} & m3 & 0011 \\
+                       & m5 & 0101 \\
+                       & m10 & 1010 \\
+    \hdashline
+    3 & m14 & 1110 \\
+    \hdashline
+
+    \end{tabular}
+  \end{adjustbox}
+\end{table}
+
+\begin{center}
+  Импликанты 1-го уровня
+\end{center}
+
+\begin{table}[h!]
+  \centering
+  \setlength{\arrayrulewidth}{0.3mm}
+  \setlength{\tabcolsep}{38pt}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{ p{4cm} p{2cm} p{5cm} }
+
+    \multirow{2}{*}{Количество ``1''} & \multirow{2}{*}{Минтерм} & Двоичное      \\
+                                      &                          & представление \\
+    &&\\
+    \hdashline
+    \multirow{6}{*}{1} & m(1, 3) & 00-1* \\
+                       & m(1, 5) & 0-01* \\
+                       & m(2, 3) & 001-* \\
+                       & m(2, 10) & -010* \\
+                       & m(4, 5) & 010-* \\
+                       & m(8, 10) & 10-0* \\
+    \hdashline
+    2 & m(10, 14) & 1-10* \\
+    \hdashline
+
+    \end{tabular}
+  \end{adjustbox}
+\end{table}
+
+\vspace{10pt}
+
+Таким образом, мы получили следующую \textbf{сокращенную дизъюнктивную нормальную форму}
+инверсии заданной функции:
+
+\begin{equation*}
+  \OV{\itshape f} = \OV{A}\OV{B}\NOV{D} + \OV{A}\OV{C}\NOV{D} + \OV{A}\OV{B}\NOV{C} + \OV{B}\NOV{C}\OV{D} +
+  \OV{A}\NOV{B}\OV{C} + \NOV{A}\OV{B}\OV{D} + \NOV{A}\NOV{C}\OV{D}
+\end{equation*}
+
+\newpage
+
+\begin{table}[h!]
+  \centering
+  \setlength{\arrayrulewidth}{0.1mm}
+  \setlength{\tabcolsep}{10pt}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{|p{2cm}|c|c|c|c|c|c|c|c|c|}
+    \noalign{\global\arrayrulewidth=0.6mm}
+    \hline
+                      & 1 & 2 & 3 & 4 & 5  & 8  & 10 & 14 & \\
+    \hline
+    \noalign{\global\arrayrulewidth=0.1mm}
+     m(1, 3)          & 1 &   & 1 &   &    &    &    &    & $\OV{A}\OV{B}\NOV{D}$ \\
+    \hline
+     m(1, 5)          & 1 &   &   &   &  1 &    &    &    & $\OV{A}\OV{C}\NOV{D}$ \\
+    \hline
+     m(2, 3)          &   &  1 &  1 &   &    &   &   &    & $\OV{A}\OV{B}\NOV{C}$ \\
+     \hline
+     m(2, 10)         &   & 1  &   &   &    &  &  1 &    & $\OV{B}\NOV{C}\OV{D}$ \\
+     \hline
+     m(4, 5)          &   &   &   &  1 &  1  &   &   &    & $\OV{A}\NOV{B}\OV{C}$ \\
+     \hline
+     m(8, 10)         &   &   &   &   &    & 1  &  1 &    & $\NOV{A}\OV{B}\OV{D}$ \\
+     \hline
+     m(10, 14)        &   &   &   &   &    &   &  1 & 1   & $\NOV{A}\NOV{C}\OV{D}$ \\
+
+    \noalign{\global\arrayrulewidth=0.6mm}
+    \hline
+                      &   &   &   & \faStarO  &  \faStarO  &   \faStarO &  \faStarO  &   \faStarO & \\
+    \hline
+    \noalign{\global\arrayrulewidth=0.1mm}
+    \end{tabular}
+  \end{adjustbox}
+\end{table}
+
+\paragraph{Методом Петрика найти все тупиковые формы для ДНФ функции $\OV{\itshape f}$}
+
+После всех удалений получим упрощенную матрицу:
+
+\begin{table}[h!]
+  \centering
+  \setlength{\arrayrulewidth}{0.1mm}
+  \setlength{\tabcolsep}{10pt}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{|p{2cm}|c|c|c|c|c|}
+    \noalign{\global\arrayrulewidth=0.6mm}
+    \hline
+                      & 1 & 2 & 3 & & \\
+    \hline
+    \noalign{\global\arrayrulewidth=0.1mm}
+     m(1, 3)          & 1 &   & 1& $\OV{A}\OV{B}\NOV{D}$ & $\varphi_1$ \\
+    \hline
+     m(1, 5)          & 1 &   &  & $\OV{A}\OV{C}\NOV{D}$ & $\varphi_2$ \\
+    \hline
+     m(2, 3)          &   &  1 &1& $\OV{A}\OV{B}\NOV{C}$ & $\varphi_3$ \\
+     \hline
+     m(2, 10)         &   & 1  & & $\OV{B}\NOV{C}\OV{D}$  & $\varphi_4$\\
+     \hline
+     m(4, 5)          &   &   &  & $\OV{A}\NOV{B}\OV{C}$ & $\varphi_5$ \\
+     \hline
+     m(8, 10)         &   &   &  & $\NOV{A}\OV{B}\OV{D}$ & $\varphi_6$ \\
+     \hline
+     m(10, 14)        &   &   &  & $\NOV{A}\NOV{C}\OV{D}$ & $\varphi_7$ \\
+    \hline
+    \end{tabular}
+  \end{adjustbox}
+\end{table}
+
+Введем логические переменные $\varphi_1, \varphi_2, ..., \varphi_6$ (они записаны в 
+дополнительной колонке в правой части таблицы). Будем считать, что $\varphi_1 = 1$, 
+если простая импликанта $\OV{A}\OV{B}\NOV{D}$ входит в функцию, и $\varphi_1 = 0$,
+если не входит. Аналогично и для других простых импликант. Тогда если
+\begin{equation*}
+  \varphi_1 + \varphi_3 = 1,
+\end{equation*}
+то минтерм $m_3$ входит в функцию; если $\varphi_3 + \varphi_4 = 1$, то $m_2$ входит
+в функцию и т.д.\\
+
+Условие, при котором все минтермы останутся в функции, запишется в виде
+\begin{equation*}
+  (\varphi_1 + \varphi_2)(\varphi_3 + \varphi_4)(\varphi_1 + \varphi_3) = 1.
+\end{equation*}
+
+Раскроем скобки и выполним все операции согласно теореме поглощения. В конечном итоге
+получим
+\begin{equation*}
+  \overset{\Circled{1}}{\varphi_1 \varphi_3 \vphantom{\text{\normalsize I}}} + 
+  \overset{\Circled{2}}{\varphi_1 \varphi_4 \vphantom{\text{\normalsize I}}} + 
+  \overset{\Circled{3}}{\varphi_2 \varphi_3 \vphantom{\text{\normalsize I}}} = 1
+\end{equation*}
+
+Таким образом, мы нашли ответ на поставленную задачу, правда, пока этот ответ 
+представлен в зашифрованном виде. Расшифруем его. Каждая конъюнкция в полученном 
+уравнении может быть равной единице. Если $\varphi_1 \varphi_3 = 1$, то это значит, 
+что в функцию должны войти простые импликанты $\OV{A}\OV{B}\NOV{D}$ и $\OV{A}\OV{B}\NOV{C}$. 
+Следовательно, получили первый вариант тупиковой формы:
+\begin{equation*}
+  \Circled{1}: \quad \OV{\itshape f}_1 = \OV{A}\NOV{B}\OV{C} + \NOV{A}\OV{B}\OV{D} + \NOV{A}\NOV{C}\OV{D} + 
+  \OV{A}\OV{B}\NOV{D} + \OV{A}\OV{B}\NOV{C},
+\end{equation*}
+содержащий 12 вхождений аргументов.\\ 
+
+Аналогично находим еще две тупиковые формы:
+\begin{align*}
+  \Circled{2}: \quad \OV{\itshape f}_2 = \OV{A}\NOV{B}\OV{C} + \NOV{A}\OV{B}\OV{D} + \NOV{A}\NOV{C}\OV{D} + 
+  \OV{A}\OV{B}\NOV{D} + \OV{B}\NOV{C}\OV{D}; \\
+  \Circled{3}: \quad \OV{\itshape f}_3 = \OV{A}\NOV{B}\OV{C} + \NOV{A}\OV{B}\OV{D} + \NOV{A}\NOV{C}\OV{D} + 
+  \OV{A}\OV{C}\NOV{D} + \OV{A}\OV{B}\NOV{C}.
+\end{align*}
+
+Таким образом, инверсия заданной функции имеет три тупиковые дизъюнктивные нормальные 
+формы.
+
+\paragraph{Все тупиковые форму проинвертировать по теореме де Моргана.}
+
+\begin{align*}
+  f = \left(\NOV{A} + \OV{B} + \NOV{C}\right) \left(\OV{A} + \NOV{B} + \NOV{D}\right)
+  \left(\OV{A} + \OV{C} + \NOV{D}\right) \left(\NOV{A} + \NOV{B} + \OV{D}\right)
+  \left(\NOV{A} + \NOV{B} + \OV{C}\right) \\[1em]
+  f = \left(\NOV{A} + \OV{B} + \NOV{C}\right) \left(\OV{A} + \NOV{B} + \NOV{D}\right)
+  \left(\OV{A} + \OV{C} + \NOV{D}\right) \left(\NOV{A} + \NOV{B} + \OV{D}\right)
+  \left(\NOV{B} + \OV{C} + \NOV{D}\right) \\[1em]
+  f = \left(\NOV{A} + \OV{B} + \NOV{C}\right) \left(\OV{A} + \NOV{B} + \NOV{D}\right)
+  \left(\OV{A} + \OV{C} + \NOV{D}\right) \left(\NOV{A} + \NOV{C} + \OV{D}\right)
+  \left(\NOV{A} + \NOV{B} + \OV{C}\right) \\
+\end{align*}
+
+\paragraph{Выбрать из тупиковых форм все минимальные по числу вхождений аргументов.}
+
+Во всех трех тупиковых формах оказалось по 15 вхождений переменных, а значит они 
+все являются и минимальными.
+
+\subsubsection{Проверка}
+
+Проверим первую из трех минимальных форм.
+
+\begin{table}[h!]
+  \centering
+  \setlength{\arrayrulewidth}{0.5mm}
+  \setlength{\tabcolsep}{20pt}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \rowcolor{gray!50}
+    \# & \bfseries A & \bfseries B & \bfseries C & \bfseries D & 
+    $\NOV{A} + \OV{B} + \NOV{C}$ & 
+    $\OV{A} + \NOV{B} + \NOV{D}$ & 
+    $\OV{A} + \OV{C} + \NOV{D}$ & 
+    $\NOV{A} + \NOV{B} + \OV{D}$ & 
+    $\NOV{A} + \NOV{B} + \OV{C}$ & 
+    \bfseries \itshape f \\
+    \hline
+    0 & 0 & 0 & 0 & 0 &  1&1&1&0&1& 1 \\
+    \hline
+    1 & 0 & 0 & 0 & 1 &  1&1&1&0&1& 0 \\
+    \hline
+    2 & 0 & 0 & 1 & 0 &  1&1&1&1&0& 0 \\
+    \hline
+    3 & 0 & 0 & 1 & 1 &  1&1&1&0&0& 0 \\
+    \hline
+    4 & 0 & 1 & 0 & 0 &  0&1&1&1&1& 0 \\
+    \hline
+    5 & 0 & 1 & 0 & 1 &  0&1&1&1&1& 0 \\
+    \hline
+    6 & 0 & 1 & 1 & 0 &  1&1&1&1&1& 1 \\
+    \hline
+    7 & 0 & 1 & 1 & 1 &  1&1&1&1&1& 1 \\
+    \hline
+    8 & 1 & 0 & 0 & 0 &  1&0&1&1&1& 0 \\
+    \hline
+    9 & 1 & 0 & 0 & 1 &  1&1&1&1&1& 1 \\
+    \hline
+    10 & 1 & 0 & 1 & 0 & 1&0&0&1&1& 0 \\
+    \hline
+    11 & 1 & 0 & 1 & 1 & 1&1&1&1&1& 1 \\
+    \hline
+    12 & 1 & 1 & 0 & 0 & 1&1&1&1&1& 1 \\
+    \hline
+    13 & 1 & 1 & 0 & 1 & 1&1&1&1&1& 1 \\
+    \hline
+    14 & 1 & 1 & 1 & 0 & 1&1&0&1&1& 0 \\
+    \hline
+    15 & 1 & 1 & 1 & 1 & 1&1&1&1&1& 1 \\
+    \hline
+    \end{tabular}
+  \end{adjustbox}
+\end{table}
+
+Провекра сошлась.
+
+\subsubsection{Ответ}
+
+Три минимальные конъюктивные нормальные формы исходной функции:
+\begin{align*}
+  f = \left(\NOV{A} + \OV{B} + \NOV{C}\right) \left(\OV{A} + \NOV{B} + \NOV{D}\right)
+  \left(\OV{A} + \OV{C} + \NOV{D}\right) \left(\NOV{A} + \NOV{B} + \OV{D}\right)
+  \left(\NOV{A} + \NOV{B} + \OV{C}\right) \\[1em]
+  f = \left(\NOV{A} + \OV{B} + \NOV{C}\right) \left(\OV{A} + \NOV{B} + \NOV{D}\right)
+  \left(\OV{A} + \OV{C} + \NOV{D}\right) \left(\NOV{A} + \NOV{B} + \OV{D}\right)
+  \left(\NOV{B} + \OV{C} + \NOV{D}\right) \\[1em]
+  f = \left(\NOV{A} + \OV{B} + \NOV{C}\right) \left(\OV{A} + \NOV{B} + \NOV{D}\right)
+  \left(\OV{A} + \OV{C} + \NOV{D}\right) \left(\NOV{A} + \NOV{C} + \OV{D}\right)
+  \left(\NOV{A} + \NOV{B} + \OV{C}\right) \\
+\end{align*}
+
+\newgeometry{left=25mm, right=25mm, top=20mm, bottom=20mm}
+
+\subsection{Полином Жегалкина}
+
+\subsubsection{Метод треугольника}
+
+Метод треугольника (часто называемый методом треугольника Паскаля) 
+позволяет преобразовать таблицу истинности в полином Жегалкина путём 
+построения вспомогательной треугольной таблицы в соответствии со следующими правилами: 
+
+\begin{itemize}
+  \item Строится полная таблица истинности, в которой строки идут в порядке возрастания двоичных кодов от $000 ... 00$ до $111 ... 11$.
+  \item Строится вспомогательная треугольная таблица, в которой первый столбец совпадает со столбцом значений функции в таблице истинности.
+  \item Ячейка в каждом последующем столбце получается путём суммирования по модулю 2 двух ячеек предыдущего столбца — стоящей в той же строке и строкой ниже.
+  \item Столбцы вспомогательной таблицы нумеруются двоичными кодами в том же порядке, что и строки таблицы истинности.
+  \item Каждому двоичному коду ставится в соответствие один из членов полинома Жегалкина в зависимости от позиций кода, в которых стоят единицы. Например, ячейке 111 соответствует член ABC, ячейке 101 — член AC, ячейке 010 — член B, ячейке 000 — член 1 и т. д.
+  \item Если в верхней строке какого-либо столбца стоит единица, то соответствующий член присутствует в полиноме Жегалкина.
+\end{itemize}
+
+\begin{center}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{|c|c|c|c|c|c|}
+      \hline
+      \# & \bfseries A & \bfseries B & \bfseries C & \bfseries D & \bfseries \itshape f \\
+      \hline
+      0 & 0 & 0 & 0 & 0 & 1 \\
+      \hline
+      1 & 0 & 0 & 0 & 1 & 0 \\
+      \hline
+      2 & 0 & 0 & 1 & 0 & 0 \\
+      \hline
+      3 & 0 & 0 & 1 & 1 & 0 \\
+      \hline
+      4 & 0 & 1 & 0 & 0 & 0 \\
+      \hline
+      5 & 0 & 1 & 0 & 1 & 0 \\
+      \hline
+      6 & 0 & 1 & 1 & 0 & 1 \\
+      \hline
+      7 & 0 & 1 & 1 & 1 & 1 \\
+      \hline
+      8 & 1 & 0 & 0 & 0 & 0 \\
+      \hline
+      9 & 1 & 0 & 0 & 1 & 1 \\
+      \hline
+      10 & 1 & 0 & 1 & 0 & 0 \\
+      \hline
+      11 & 1 & 0 & 1 & 1 & 1 \\
+      \hline
+      12 & 1 & 1 & 0 & 0 & 1 \\
+      \hline
+      13 & 1 & 1 & 0 & 1 & 1 \\
+      \hline
+      14 & 1 & 1 & 1 & 0 & 0 \\
+      \hline
+      15 & 1 & 1 & 1 & 1 & 1 \\
+      \hline
+    \end{tabular}
+    \hspace{10pt}\renewcommand{\arraystretch}{1.017}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c}
+      \cline{1-17}
+      1 & D & C & CD & B & BD & BC & BCD & A & AD & AC & ACD & AB & ABD & ABC & ABCD \\
+      \cline{1-17}
+      1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 0 & 1 & 0 \\
+      \cline{1-16}
+      0 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 1 & 0 & 1 & 1 \\
+      \cline{1-15}
+      0 & 0 & 0 & 0 & 1 & 0 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 0 \\
+      \cline{1-14}
+      0 & 0 & 0 & 1 & 1 & 1 & 0 & 1 & 1 & 0 & 0 & 0 & 1 \\
+      \cline{1-13}
+      0 & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 1 & 0 & 0 & 1 \\
+      \cline{1-12}
+      0 & 1 & 1 & 0 & 1 & 0 & 1 & 1 & 1 & 0 & 1 \\
+      \cline{1-11}
+      1 & 0 & 1 & 1 & 1 & 1 & 0 & 0 & 1 & 1 \\
+      \cline{1-10}
+      1 & 1 & 0 & 0 & 0 & 1 & 0 & 1 & 0 \\
+      \cline{1-9}
+      0 & 1 & 0 & 0 & 1 & 1 & 1 & 1 \\
+      \cline{1-8}
+      1 & 1 & 0 & 1 & 0 & 0 & 0 \\
+      \cline{1-7}
+      0 & 1 & 1 & 1 & 0 & 0 \\
+      \cline{1-6}
+      1 & 0 & 0 & 1 & 0 \\
+      \cline{1-5}
+      1 & 0 & 1 & 1 \\
+      \cline{1-4}
+      1 & 1 & 0 \\
+      \cline{1-3}
+      0 & 1 \\
+      \cline{1-2}
+      1 \\
+      \cline{1-1}
+    \end{tabular}
+  \end{adjustbox}
+\end{center}
+
+\begin{equation*}
+  f(\text{A}, \text{B}, \text{C}, \text{D}) = 1 \oplus \NOV{D} \oplus \NOV{C} \oplus
+  \NOV{C}\NOV{D} \oplus \NOV{B} \oplus \NOV{B}\NOV{D} \oplus \NOV{B}\NOV{C}\NOV{D} \oplus
+  \NOV{A} \oplus \NOV{A}\NOV{C} \oplus \NOV{A}\NOV{C}\NOV{D} \oplus \NOV{A}\NOV{B}\NOV{C}
+\end{equation*}
+
+\newpage
+
+В качестве проверки посчитаем полином еще раз другим способом.
+
+\subsubsection{Метод БПФ}
+
+Наиболее экономным с точки зрения объёма вычислений и целесообразным для построения 
+полинома Жегалкина вручную является метод быстрого преобразования Фурье (БПФ).\\
+
+Строим таблицу, состоящую из 2N столбцов и N + 1 строк, где N — количество переменных в 
+функции. В верхней строке таблицы размещаем вектор значений функции, то есть последний 
+столбец таблицы истинности.\\
+
+Каждую строку полученной таблицы разбиваем на блоки (черные линии на рисунке). 
+В первой строке блок занимает одну клетку, во второй строке — две, в третьей — четыре, 
+в четвёртой — восемь и т. д. Каждому блоку в некоторой строке, который мы будем называть 
+«нижний блок», всегда соответствует ровно два блока в предыдущей строке. Будем называть 
+их «левый верхний блок» и «правый верхний блок».\\
+
+Построение начинается со второй строки. Содержимое левых верхних блоков без 
+изменения переносится в соответствующие клетки нижнего блока. Затем над правым верхним и 
+левым верхним блоками побитно производится операция «сложение по модулю два», и полученный 
+результат переносится в соответствующие клетки правой части нижнего блока. Эта операция проводится 
+со всеми строками сверху вниз и со всеми блоками в каждой строке. После окончания построения 
+в нижней строке оказывается строка чисел, которая является коэффициентами полинома 
+Жегалкина, записанными в той же последовательности, что и в описанном выше методе треугольника. 
+
+\begin{center}
+  \renewcommand{\arraystretch}{1.5}
+  \begin{adjustbox}{max width=1\textwidth}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+      1 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 1 & 0 & 1 & 1 & 1 & 0 & 1 \\
+      \hline
+      \multicolumn{2}{|c|}{1 \hspace{1pt} \hfill \hspace{1pt} 1} & 
+      \multicolumn{2}{ c|}{0 \hspace{1pt} \hfill \hspace{1pt} 0} & 
+      \multicolumn{2}{ c|}{0 \hspace{1pt} \hfill \hspace{1pt} 0} & 
+      \multicolumn{2}{ c|}{1 \hspace{1pt} \hfill \hspace{1pt} 0} & 
+      \multicolumn{2}{ c|}{0 \hspace{1pt} \hfill \hspace{1pt} 1} & 
+      \multicolumn{2}{ c|}{0 \hspace{1pt} \hfill \hspace{1pt} 1} & 
+      \multicolumn{2}{ c|}{1 \hspace{1pt} \hfill \hspace{1pt} 0} & 
+      \multicolumn{2}{ c|}{0 \hspace{1pt} \hfill \hspace{1pt} 1} \\
+      \hline
+      \multicolumn{4}{|c }{1 \hspace{1pt} \hfill \hspace{1pt} 1 \hspace{1pt} \hfill \hspace{1pt} 
+                           1 \hspace{1pt} \hfill \hspace{1pt} 1} & 
+      \multicolumn{4}{|c }{0 \hspace{1pt} \hfill \hspace{1pt} 0 \hspace{1pt} \hfill \hspace{1pt} 
+                           1 \hspace{1pt} \hfill \hspace{1pt} 0} & 
+      \multicolumn{4}{|c }{0 \hspace{1pt} \hfill \hspace{1pt} 1 \hspace{1pt} \hfill \hspace{1pt} 
+                           0 \hspace{1pt} \hfill \hspace{1pt} 0} & 
+      \multicolumn{4}{|c|}{1 \hspace{1pt} \hfill \hspace{1pt} 0 \hspace{1pt} \hfill \hspace{1pt} 
+                           1 \hspace{1pt} \hfill \hspace{1pt} 1} \\
+      \hline
+      \multicolumn{8}{|c }{1 \hspace{1pt} \hfill \hspace{1pt} 1 \hspace{1pt} \hfill \hspace{1pt} 
+                           1 \hspace{1pt} \hfill \hspace{1pt} 1 \hspace{1pt} \hfill \hspace{1pt} 
+                           1 \hspace{1pt} \hfill \hspace{1pt} 1 \hspace{1pt} \hfill \hspace{1pt} 
+                           0 \hspace{1pt} \hfill \hspace{1pt} 1} &
+      \multicolumn{8}{|c|}{0 \hspace{1pt} \hfill \hspace{1pt} 1 \hspace{1pt} \hfill \hspace{1pt} 
+                           0 \hspace{1pt} \hfill \hspace{1pt} 0 \hspace{1pt} \hfill \hspace{1pt} 
+                           1 \hspace{1pt} \hfill \hspace{1pt} 1 \hspace{1pt} \hfill \hspace{1pt} 
+                           1 \hspace{1pt} \hfill \hspace{1pt} 1} \\
+      \hline
+      \multicolumn{16}{|c|}{1 \hspace{1pt} \hfill \hspace{1pt} 1 \hspace{1pt} \hfill \hspace{1pt} 
+                            1 \hspace{1pt} \hfill \hspace{1pt} 1 \hspace{1pt} \hfill \hspace{1pt} 
+                            1 \hspace{1pt} \hfill \hspace{1pt} 1 \hspace{1pt} \hfill \hspace{1pt} 
+                            0 \hspace{1pt} \hfill \hspace{1pt} 1 \hspace{1pt} \hfill \hspace{1pt} 
+                            1 \hspace{1pt} \hfill \hspace{1pt} 0 \hspace{1pt} \hfill \hspace{1pt} 
+                            1 \hspace{1pt} \hfill \hspace{1pt} 1 \hspace{1pt} \hfill \hspace{1pt} 
+                            0 \hspace{1pt} \hfill \hspace{1pt} 0 \hspace{1pt} \hfill \hspace{1pt} 
+                            1 \hspace{1pt} \hfill \hspace{1pt} 0} \\
+      \noalign{\global\arrayrulewidth=0.8mm}
+      \hline
+      \hphantom{|A}1\hphantom{A|} & \hphantom{|A}D\hphantom{A|} & \hphantom{|A}C\hphantom{A|} & 
+      \hphantom{A}CD\hphantom{A}  & \hphantom{|A}B\hphantom{A|} & \hphantom{A}BD\hphantom{A}  & 
+      \hphantom{A}BC\hphantom{A}  & \hphantom{|}BCD\hphantom{|} & \hphantom{|A}A\hphantom{A|} & 
+      \hphantom{A}AD\hphantom{A}  & \hphantom{A}AC\hphantom{A}  & \hphantom{|}ACD\hphantom{|} & 
+      \hphantom{A}AB\hphantom{A}  & \hphantom{|}ABD\hphantom{|} & \hphantom{|}ABC\hphantom{|} & 
+      ABCD \\
+      \hline
+      \noalign{\global\arrayrulewidth=0.1mm}
+    \end{tabular}
+  \end{adjustbox}
+\end{center}
+
+\begin{equation*}
+  f(\text{A}, \text{B}, \text{C}, \text{D}) = 1 \oplus \NOV{D} \oplus \NOV{C} \oplus
+  \NOV{C}\NOV{D} \oplus \NOV{B} \oplus \NOV{B}\NOV{D} \oplus \NOV{B}\NOV{C}\NOV{D} \oplus
+  \NOV{A} \oplus \NOV{A}\NOV{C} \oplus \NOV{A}\NOV{C}\NOV{D} \oplus \NOV{A}\NOV{B}\NOV{C}
+\end{equation*}
+
+\subsubsection{Проверка}
+
+Результаты в методах треугольника и БПФ совпали. 
+
+\newpage
+
+\section{Задача \rom{2}}
+
+Для булевой функции из задачи \rom{1}: \\
+
+a) используя метод каскадов, построить контактную
+схему, проанализировав и проверив правильность её построения с помощью дерева
+анализа;\\
+
+б) положив $X_{(N \hspace{3pt} mod \hspace{3pt} 4)+1} = 0$, построить логическую схему из функциональных
+элементов (инвертора, дизьюнктора, коньюнктора и дублятора).
+
+\subsection{Часть а)}
+
+\subsubsection{Синтез контактной схемы методом каскадов}
+
+\begin{equation*}
+  f(\text{A}, \text{B}, \text{C}, \text{D}) = 1 \oplus \NOV{D} \oplus \NOV{C} \oplus
+  \NOV{C}\NOV{D} \oplus \NOV{B} \oplus \NOV{B}\NOV{D} \oplus \NOV{B}\NOV{C}\NOV{D} \oplus
+  \NOV{A} \oplus \NOV{A}\NOV{C} \oplus \NOV{A}\NOV{C}\NOV{D} \oplus \NOV{A}\NOV{B}\NOV{C}
+\end{equation*}
+
+\begin{center}
+  \scalebox{0.7}{
+    \begin{tikzpicture}[
+      node distance=2cm,
+      neuron/.style={circle, draw, minimum size=1cm},
+      arrow/.style={-{Stealth}}
+  ]
+
+      % Input layer
+      \node[neuron] (q) {$q$};
+
+      % Hidden layer 1
+      \node[neuron, right=of q, yshift=3cm] (v1) {$v_1$};
+      \node[above=0.2cm of v1] (v1_text) {$f(1, B, C, D)$};
+      \node[neuron, right=of q, yshift=-3cm] (v2) {$v_2$};
+      \node[below=0.2cm of v2] (v2_text) {$f(0, B, C, D)$};
+
+      % Hidden layer 2
+      \node[neuron, right=of v1, xshift=1cm, yshift=2cm] (v3) {$v_3$};
+      \node[above=0.2cm of v3] (v3_text) {$f(1, 1, C, D)$};
+      \node[neuron, right=of v1, xshift=1cm, yshift=-2cm] (v4) {$v_4$};
+      \node[below=0.2cm of v4] (v4_text) {$f(1, 0, C, D)$};
+
+      % Hidden layer 3
+      \node[neuron, right=of v2, xshift=1cm, yshift=1cm] (v5) {$v_5$};
+      \node[below=0.2cm of v5] (v5_text) {$f(0, 1, C, D)$};
+      \node[neuron, right=of v2, xshift=1cm, yshift=-2cm] (v6) {$v_6$};
+      \node[below=0.2cm of v6] (v6_text) {$f(0, 0, C, D)$};
+
+      % Hidden layer 4
+      \node[neuron, xshift=1cm, yshift=1cm, right=of v6] (v7) {$v_7$};
+      \node[below=0.2cm of v7] (v7_text) {$f(0, 0, 0, D)$};
+
+      % Output layer
+      \node[neuron, right=of v4, xshift=4.5cm, yshift=-0.8cm] (e) {$e$};
+
+      % Connections
+      \draw[arrow] (q) -- (v1) node[midway, above, sloped] {$\NOV{A}$};
+      \draw[arrow] (q) -- (v2) node[midway, below, sloped] {$\OV{A}$};
+
+      \draw[arrow] (v1) -- (v3) node[midway, above, sloped] {$\NOV{B}$};
+      \draw[arrow] (v1) -- (v4) node[midway, below, sloped] {$\OV{B}$};
+
+      \draw[arrow] (v3) -- (v4) node[midway, above, sloped] {$\NOV{C}$};
+      \draw[arrow] (v3) -- (e) node[midway, above, sloped] {$\OV{C}$};
+
+      \draw[arrow] (v4) -- (e) node[midway, above, sloped] {$\NOV{D}$};
+
+      \draw[arrow] (v2) -- (v5) node[midway, above, sloped] {$\NOV{B}$};
+      \draw[arrow] (v2) -- (v6) node[midway, below, sloped] {$\OV{B}$};
+
+      \draw[arrow] (v5) -- (e) node[midway, above, sloped] {$\NOV{C}$};
+
+      \draw[arrow] (v6) -- (v7) node[midway, above, sloped] {$\OV{C}$};
+
+      \draw[arrow] (v7) -- (e) node[midway, above, sloped] {$\OV{D}$};
+
+    \end{tikzpicture}
+  }
+\end{center}
+\begin{flalign*}
+  & f(1, B, C, D) = \NOV{D} \oplus \NOV{B} \oplus \NOV{B}\NOV{D} \oplus \NOV{B}\NOV{C}\NOV{D} \oplus \NOV{B}\NOV{C}& \\
+  & f(0, B, C, D) = 1 \oplus \NOV{D} \oplus \NOV{C} \oplus \NOV{C}\NOV{D} \oplus \NOV{B} \oplus \NOV{B}\NOV{D} \oplus \NOV{B}\NOV{C}\NOV{D}& \\
+  & f(1, 1, C, D) = 1 \oplus \NOV{C} \oplus \NOV{C}\NOV{D}& \\
+  & f(1, 0, C, D) = D& \\
+  & f(0, 1, C, D) = C& \\
+  & f(0, 0, C, D) = 1 \oplus \NOV{D} \oplus \NOV{C} \oplus \NOV{C}\NOV{D}& \\
+  & f(0, 0, 0, D) = 1 \oplus \NOV{D}&
+\end{flalign*}
+
+\newpage
+
+\subsubsection{Дерево анализа контактной схемы}
+
+\vfill
+
+\begin{center}
+  \begin{tikzpicture}[
+    level 1/.style={sibling distance=70mm},
+    level 2/.style={sibling distance=20mm},
+    level 3/.style={sibling distance=15mm},
+    edge from parent/.style={draw, -latex},
+    every node/.style={draw, circle},
+    label node/.style={draw=none, fill=none, font=\footnotesize, text=RED}
+  ]
+  
+    \node (q) {q}
+      child {node (v1) {$v_1$}
+          child {node (v3) {$v_3$}
+              child {node (v4) {$v_4$}}
+              child {node (v1b) {$v_1$}}
+              child {node (e1) {e}}
+          }
+          child {node (qb) {q}}
+          child {node (v4b) {$v_4$}
+              child {node (v1c) {$v_1$}}
+          }
+          child {node (e4) {e}}
+      }
+      child {node (v2) {$v_2$}
+          child {node (v5) {$v_5$}
+              child {node (e2) {e}}
+              child {node (v2b) {$v_2$}}
+          }
+          child {node (qc) {q}}
+          child {node (v6) {$v_6$}
+              child {node (v7) {$v_7$}
+                  child {node (e3) {e}}
+                  child {node (v6b) {$v_6$}}
+              }
+              child {node (v2c) {$v_2$}}
+          }
+      };
+  
+    % Adding labels separately
+    \path (q) -- (v1) node[midway, above, label node] {$\NOV{A}$};
+    \path (q) -- (v2) node[midway, above, label node] {$\OV{A}$};
+  
+    \path (v1) -- (v3) node[midway, above, label node] {$\NOV{B}$};
+    \path (v1) -- (v4b) node[midway, left, label node] {$\OV{B}$};
+    \path (v1) -- (qb) node[midway, left, label node] {$\NOV{A}$};
+    \path (v1) -- (e4) node[midway, above, label node] {$\NOV{D}$};
+  
+    \path (v3) -- (v4) node[midway, left, label node] {$\NOV{C}$};
+    \path (v3) -- (e1) node[midway, right, label node] {$\OV{C}$};
+    \path (v3) -- (v1b) node[midway, left, label node] {$\NOV{B}$};
+  
+    \path (v4b) -- (v1c) node[midway, left, label node] {$\OV{B}$};
+  
+    \path (v2) -- (v5) node[midway, above, label node] {$\NOV{B}$};
+    \path (v2) -- (v6) node[midway, above, label node] {$\OV{B}$};
+    \path (v2) -- (qc) node[midway, left, label node] {$\OV{A}$};
+  
+    \path (v5) -- (e2) node[midway, left, label node] {$\NOV{C}$};
+    \path (v5) -- (v2b) node[midway, right, label node] {$\NOV{B}$};
+  
+    \path (v6) -- (v7) node[midway, left, label node] {$\OV{C}$};
+    \path (v6) -- (v2c) node[midway, right, label node] {$\OV{B}$};
+  
+    \path (v7) -- (e3) node[midway, left, label node] {$\OV{D}$};
+    \path (v7) -- (v6b) node[midway, right, label node] {$\OV{C}$};
+  
+  \end{tikzpicture}
+\end{center}
+
+% \vfill
+
+\begin{align*}
+  & \pi_1 = \left(q   \overset{\NOV{A}}{\xrightarrow{\hspace*{1cm}}} v_1, 
+                v_1 \overset{\NOV{D}}{\xrightarrow{\hspace*{1cm}}}  e \right) \\[2em]
+  & \pi_2 = \left(q   \overset{\NOV{A}}{\xrightarrow{\hspace*{1cm}}} v_1, 
+                v_1 \overset{\NOV{B}}{\xrightarrow{\hspace*{1cm}}}  v_3,
+                v_3 \overset{\OV{C}}{\xrightarrow{\hspace*{1cm}}}  e \right) \\[2em]
+  & \pi_3 = \left(q   \overset{\OV{A}}{\xrightarrow{\hspace*{1cm}}} v_2, 
+                v_2 \overset{\NOV{B}}{\xrightarrow{\hspace*{1cm}}}  v_5,
+                v_5 \overset{\NOV{C}}{\xrightarrow{\hspace*{1cm}}}  e \right) \\[2em]
+  & \pi_4 = \left(q   \overset{\OV{A}}{\xrightarrow{\hspace*{1cm}}} v_2, 
+                v_2 \overset{\OV{B}}{\xrightarrow{\hspace*{1cm}}}  v_6,
+                v_6 \overset{\OV{C}}{\xrightarrow{\hspace*{1cm}}}  v_7,
+                v_7 \overset{\OV{D}}{\xrightarrow{\hspace*{1cm}}}  e \right)
+\end{align*}
+
+\vfill
+
+\begin{equation*}
+  \scalebox{1.5}{$f = \OV{A}\OV{B}\OV{C}\OV{D} + \OV{A}\NOV{B}\NOV{C} + \NOV{A}\NOV{B}\OV{C} + \NOV{A}\NOV{D}$}
+\end{equation*}
+
+\vfill
+
+\newpage
+
+\subsection{Часть б)}
+
+\subsubsection{Логическая схема из функциональных элементов}
+
+\begin{gather*}
+  X_{(9 \hspace{3pt} mod \hspace{3pt} 4) + 1} = X_2 = 0 \Longrightarrow \NOV{B} = 0 \\[1em]
+  f = \OV{A}\OV{C}\OV{D} + \NOV{A}\NOV{D}
+\end{gather*}
+
+\begin{adjustbox}{max width=1\textwidth}
+  \begin{tikzpicture}[
+    node distance=2cm,
+    every node/.style={draw, circle, minimum size=1cm},
+    every edge/.style={draw, -latex},
+    label node/.style={draw=none, fill=none, font=\footnotesize, text=RED}
+  ]
+
+    % First level nodes
+    \node (A) {A};
+    \node[below=of A] (C) {C};
+    \node[below=of C] (D) {D};
+
+    % Second level nodes
+    \node[right=of A, yshift=3cm, xshift=1cm] (eq1) {$=$};
+    \node[below=of eq1] (neg1) {$\neg$};
+    \node[below=of neg1] (neg2) {$\neg$};
+    \node[below=of neg2] (eq2) {$=$};
+    \node[below=of eq2] (neg3) {$\neg$};
+
+    % Third level nodes
+    \node[right=of eq1, yshift=-4.5cm, xshift=2cm] (land1) {$\land$};
+    \node[below=of land1] (land2) {$\land$};
+
+    % Fourth level node
+    \node[right=of land1, yshift=-1.5cm, xshift=3cm] (lor) {$\lor$};
+
+    % Triangle node
+    \node[right=of lor, xshift=0cm, draw=none, inner sep=-20pt, outer sep=-11pt] (triangle) {
+      \tikz \draw[stroke=black, rotate=30, scale=1.1] (0,0) -- (0.5,0) -- (0.25,0.433) -- cycle;
+    };
+    
+    \node[right=of triangle, xshift=-65.5pt, draw=none, inner sep=-20pt, outer sep=-2pt] (triangle2) {
+      \tikz \draw[stroke=black, rotate=30, scale=1.1] (0,0) -- (0.5,0) -- (0.25,0.433) -- cycle;
+    };
+
+    % Connections
+    \draw (A) -- (eq1);
+    \draw (A) -- (neg1);
+    \draw (C) -- (neg2);
+    \draw (D) -- (eq2);
+    \draw (D) -- (neg3);
+
+    \draw (eq1) -- node[near start, above, label node] {$\NOV{A}$} (land1);
+    \draw (neg1) -- node[near start, above, label node] {$\OV{A}$} (land2);
+    \draw (neg2) -- node[near start, above, label node] {$\OV{C}$} (land2);
+    \draw (eq2) -- node[near start, above, left, label node] {$\NOV{D}$} (land1);
+    \draw (neg3) -- node[near start, above,left, label node] {$\OV{D}$} (land2);
+
+    \draw (land1) -- (lor);
+    \draw (land2) -- (lor);
+
+    \draw (lor) -- (triangle);
+
+  \end{tikzpicture}
+\end{adjustbox}
+
+\end{document}
