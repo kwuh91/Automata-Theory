@@ -32,27 +32,29 @@
 % Вариант
 \newcommand{\variant}{9}
 
+\let\emptyset\varnothing
+
 \begin{document}
 
 \graphicspath{ {../latexDependencies/images} } 
 \input{../latexDependencies/frontmatter/titlepage2}
 
-\newgeometry{left=25mm, right=25mm, top=10mm, bottom=13mm}
+\newgeometry{left=25mm, right=25mm, top=20mm, bottom=20mm}
 
 \graphicspath{ {../latexDependencies/images/HW2-1} }
 
 % Customize section, subsection, subsubsection and paragraph styles
 \titleformat{\section}
-  {\normalfont\large\bfseries}{\thesection}{1em}{}
+  {\normalfont\large\bfseries}{\thesection}{2em}{}
 
 \titleformat{\subsection}
-  {\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
+  {\normalfont\normalsize\bfseries}{\thesubsection}{2em}{}
 
 \titleformat{\subsubsection}
-  {\normalfont\small\bfseries}{\thesubsubsection}{1em}{}
+  {\normalfont\small\bfseries}{\thesubsubsection}{2em}{}
 
 \titleformat{\paragraph}
-  {\small\small\bfseries}{\theparagraph}{1em}{}
+  {\small\small\bfseries}{\theparagraph}{2em}{}
 
 % \thispagestyle{empty}
 
@@ -107,7 +109,8 @@
 \section*{Исходные данные}\vspace{-20pt}\rule{\linewidth}{0.1mm}
 
 \begin{center}
-  \fontsize{17.28pt}{20.736pt}\selectfont 
+  % \fontsize{17.28pt}{20.736pt}\selectfont 
+  \normalsize
   \bfseries
   Задача для право-линейной грамматики
   % $ \text{Таблица} \hspace{15pt} \to \hspace{15pt} \text{продукций} \hspace{15pt} \to \hspace{15pt} \text{грамматик} $
@@ -117,41 +120,238 @@
 
 \begin{figure}[h]
   \centering
-  \includegraphics[page=1, scale=6]{graphics/data2}
-\end{figure}
-
-% \newpage
-
-\vspace{-5pt}
-
-\begin{center}
-  \fontsize{17.28pt}{20.736pt}\selectfont 
-  \bfseries
-  Построим автомат право-линейной грамматики
-\end{center}
-
-% \vspace{-20pt}
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[page=1, scale=3.65]{graphics/diagramm1}
+  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{graphics/data2}
 \end{figure}
 
 \newpage
-\newgeometry{left=25mm, right=25mm, top=20mm, bottom=20mm}
+
+\vfill
 
 \begin{center}
+  \normalsize
+  \bfseries
+  Построим диаграмму автомата право-линейной грамматики
+\end{center}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5925\textwidth,height=0.5925\textheight,keepaspectratio]{graphics/diagramm1}
+\end{figure}
+
+\begin{center}
+  \normalsize
+  \bfseries
   Произведем редукцию автомата относительно бесплодного состояния
 \end{center}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[page=1, scale=3.65]{graphics/diagramm2}
+  \includegraphics[width=0.5925\textwidth,height=0.5925\textheight,keepaspectratio]{graphics/diagramm2}
 \end{figure}
 
-Произведём детерминацию (синим цветом отмечены заключительные состояния)
+\vfill
 
+\newpage
 
+\begin{center}
+  \normalsize
+  \bfseries
+  Произведём детерминацию
+\end{center}
+
+\begin{center}
+  \resizebox{\textwidth}{!}{$\displaystyle
+    \begin{array}{c@{\hspace{4em}}c}
+      \begin{aligned}
+        q_0 & = \left\{ S \right\} : \\
+        & \quad
+        \begin{cases}
+          \xrightarrow{\hphantom{abc}a\hphantom{abc}} \left\{ A \hspace{3pt} C \right\} & = q_1 \\
+          \xrightarrow{\hphantom{abc}b\hphantom{abc}} \emptyset
+        \end{cases} \\[2em]
+        q_1 & = \left\{ A \hspace{3pt} C \right\} : \\
+        &
+        \begin{cases}
+          \xrightarrow{\hphantom{abc}a\hphantom{abc}} \left\{ K \right\} & = q_2 \rightsquigarrow \\
+          \xrightarrow{\hphantom{abc}b\hphantom{abc}} \left\{ A \hspace{3pt} S \hspace{3pt} K \right\} & = q_3 \rightsquigarrow
+        \end{cases} \\[2em]
+        q_2 & = \left\{ K \right\} \\
+        & \xrightarrow{\hphantom{\hspace{107.5pt}}} q_2 \\[2em]
+        q_3 & = \left\{ A \hspace{3pt} S \hspace{3pt} K \right\} : \\
+        &
+        \begin{cases}
+          \xrightarrow{\hphantom{abc}a\hphantom{abc}} \left\{ K \hspace{3pt} C \hspace{3pt} A \right\} & = q_4 \rightsquigarrow \\
+          \xrightarrow{\hphantom{abc}b\hphantom{abc}} \left\{ A \hspace{3pt} S \hspace{3pt} \right\} & = q_5
+        \end{cases} \\[2em]
+        q_4 & = \left\{ K \hspace{3pt} C \hspace{3pt} A \right\} : \\
+        &
+        \begin{cases}
+          \xrightarrow{\hphantom{abc}a\hphantom{abc}} \left\{ K \right\} & = q_2 \\
+          \xrightarrow{\hphantom{abc}b\hphantom{abc}} \left\{ A \hspace{3pt} K \hspace{3pt} B \hspace{3pt} S \right\} & = q_6 \rightsquigarrow
+        \end{cases} \\[2em]
+        q_5 & = \left\{ A \hspace{3pt} S \right\} : \\
+        &
+        \begin{cases}
+          \xrightarrow{\hphantom{abc}a\hphantom{abc}} \left\{ K \hspace{3pt} C \hspace{3pt} A \right\} & = q_4 \\
+          \xrightarrow{\hphantom{abc}b\hphantom{abc}} \left\{ A \hspace{3pt} S \right\} & = q_5
+        \end{cases}
+      \end{aligned}
+      &
+      \begin{aligned}
+        q_6 & = \left\{ A \hspace{3pt} K \hspace{3pt} B \hspace{3pt} S \right\} : \\
+        &
+        \begin{cases}
+          \xrightarrow{\hphantom{abc}a\hphantom{abc}} \left\{ K \hspace{3pt} C \hspace{3pt} B \hspace{3pt} A \right\} & = q_7 \rightsquigarrow \\
+          \xrightarrow{\hphantom{abc}b\hphantom{abc}} \left\{ A \hspace{3pt} S \right\} & = q_5
+        \end{cases} \\[2em]
+        q_7 & = \left\{ K \hspace{3pt} C \hspace{3pt} B \hspace{3pt} A \right\} : \\
+        &
+        \begin{cases}
+          \xrightarrow{\hphantom{abc}a\hphantom{abc}} \left\{ C \hspace{3pt} B \hspace{3pt} K \right\} & = q_8 \rightsquigarrow \\
+          \xrightarrow{\hphantom{abc}b\hphantom{abc}} \left\{ A \hspace{3pt} K \hspace{3pt} S \right\} & = q_3
+        \end{cases} \\[2em]
+        q_8 & = \left\{ C \hspace{3pt} B \hspace{3pt} K \right\} : \\
+        &
+        \begin{cases}
+          \xrightarrow{\hphantom{abc}a\hphantom{abc}} \left\{ C \hspace{3pt} B \right\} & = q_9 \\
+          \xrightarrow{\hphantom{abc}b\hphantom{abc}} \left\{ K \right\} & = q_2
+        \end{cases} \\[2em]
+        q_9 & = \left\{ C \hspace{3pt} B \right\} : \\
+        &
+        \begin{cases}
+          \xrightarrow{\hphantom{abc}a\hphantom{abc}} \left\{ C \hspace{3pt} B \right\} & = q_9 \\
+          \xrightarrow{\hphantom{abc}b\hphantom{abc}} \left\{ A \hspace{3pt} K \hspace{3pt} B \right\} & = q_{10} \rightsquigarrow
+        \end{cases} \\[2em]
+        q_{10} & = \left\{ A \hspace{3pt} K \hspace{3pt} B \right\} : \\
+        &
+        \begin{cases}
+          \xrightarrow{\hphantom{abc}a\hphantom{abc}} \left\{ K \hspace{3pt} C \hspace{3pt} B \right\} & = q_8 \\
+          \xrightarrow{\hphantom{abc}b\hphantom{abc}} \left\{ A \hspace{3pt} S \right\} & = q_5
+        \end{cases}
+      \end{aligned}
+    \end{array}$
+  }
+\end{center}
+
+\newpage
+
+\begin{center}
+  \normalsize
+  \bfseries
+  Автомат-анализатор для право-линейной грамматики
+\end{center}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{graphics/diagramm3}
+\end{figure}
+
+\vfill
+
+\begin{center}
+  \normalsize
+  \bfseries
+  Выполним проверку
+\end{center}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth,height=0.5\textheight,keepaspectratio]{graphics/diagramm4}
+\end{figure}
+
+\begin{center}
+  \normalsize
+  \bfseries
+  Проверка сошлась для автомата грамматики и автомата-анализатора языка право-линейной грамматики.
+\end{center}
+
+\newpage
+
+\vfill
+
+\begin{center}
+  \normalsize
+  \bfseries
+  Задача для лево-линейной грамматики
+\end{center}
+
+\vspace{-5pt}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth,height=0.7\textheight,keepaspectratio]{one}
+\end{figure}
+
+\vfill
+
+\begin{center}
+  \normalsize
+  \bfseries
+  Построим диаграмму автомата лево-линейной грамматики
+\end{center}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.85\textwidth,height=0.85\textheight,keepaspectratio]{two}
+\end{figure}
+
+\vfill
+
+\newpage
+
+\begin{center}
+  \normalsize
+  \bfseries
+  Произведем редукцию автомата относительно недостижимого состояния
+\end{center}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth,height=1\textheight,keepaspectratio]{three}
+\end{figure}
+
+\newpage
+
+\begin{center}
+  \normalsize
+  \bfseries
+  Произведём детерминацию
+\end{center}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\textwidth,height=0.9\textheight,keepaspectratio]{four}
+\end{figure}
+
+\newpage
+
+\begin{center}
+  \normalsize
+  \bfseries
+  Автомат-анализатор для лево-линейной грамматики
+\end{center}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth,height=0.7\textheight,keepaspectratio]{five}
+\end{figure}
+
+\begin{center}
+  \normalsize
+  \bfseries
+  Выполним проверку
+\end{center}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth,height=0.7\textheight,keepaspectratio]{six}
+\end{figure}
+
+\begin{center}
+  \normalsize
+  \bfseries
+  Проверка сошлась для автомата грамматики и автомата-анализатора языка лево-линейной грамматики.
+\end{center}
 
 \end{document}
 
